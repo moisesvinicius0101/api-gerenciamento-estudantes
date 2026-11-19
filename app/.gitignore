@@ -1,5 +1,5 @@
-app/venv/
-**/__pycache__/
+venv/
+__pycache__/
 *.pyc
 .env
-app/school.db
+school.db
