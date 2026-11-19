@@ -37,7 +37,7 @@ def get_course_by_id(id_course: int, db: db_dependency):
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_course(db: db_dependency, data_course: CourseCreate):
 
-    course = create_course(db, data_course)
+    course = courses.create_course(db, data_course)
 
     if not course:
         raise HTTPException(
@@ -49,7 +49,7 @@ def create_course(db: db_dependency, data_course: CourseCreate):
 
 @router.put("/{id_course}", status_code=status.HTTP_200_OK)
 def update_course(id_course: int, db: db_dependency, data_course: CourseUpdate):
-    course = update_course(db, id_course, data_course)
+    course = courses.update_course(db, id_course, data_course)
 
     if not course:
         raise HTTPException(
@@ -61,7 +61,7 @@ def update_course(id_course: int, db: db_dependency, data_course: CourseUpdate):
 
 @router.delete("/{id_course}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_course(id_course: int, db: db_dependency):
-    course = delete_course(db, id_course)
+    course = courses.delete_course(db, id_course)
 
     if not course:
         raise HTTPException(
