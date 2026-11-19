@@ -9,6 +9,9 @@ from alembic import context
 from database import Base, engine
 import models  # noqa: F401  (só para registrar os models no Base)
 
+from models.students import Student
+from models.courses import Course
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
