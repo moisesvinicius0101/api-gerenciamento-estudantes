@@ -15,12 +15,12 @@ def get_course_by_id(db: Session, id_course):
     return db.get(Course, id_course)
 
 def create_course(db: Session, data_course: CourseCreate):
-    query = select(Course).where(Course.name == str(data_course.title))
+    query = select(Course).where(Course.title == str(data_course.title))
     if db.scalar(query):
         return None 
 
     new_course = Course(
-        name=data_course.title,
+        title=data_course.title,
         description=data_course.description
     )
 
@@ -29,7 +29,7 @@ def create_course(db: Session, data_course: CourseCreate):
     db.refresh(new_course)
     return new_course
 
-def update_course(db: Session, id_course, course: UpdateCourse):
+def update_course(db: Session, id_course, course: CourseUpdate):
     course_db = db.get(Course, id_course)
     if not course_db:
         return None
@@ -40,13 +40,13 @@ def update_course(db: Session, id_course, course: UpdateCourse):
         if key == "title":
             existing = db.scalar(
                 select(Course).where(
-                    Course.name == value,
+                    Course.title == value,
                     Course.id != id_course,
                 )
             )
             if existing:
                 raise ValueError("Curso já cadastrado")
-            setattr(course_db, "name", value)
+            setattr(course_db, "title", value)
         else:
             setattr(course_db, key, value)
 
