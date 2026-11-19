@@ -4,7 +4,7 @@ from sqlalchemy import select
 
 from models.courses import Course
 
-from schemas.courses_schemas import CourseCreate, UpdateCourse 
+from schemas.courses_schemas import CourseCreate, CourseUpdate 
 
 
 def get_all_courses(db: Session):
@@ -29,7 +29,7 @@ def create_course(db: Session, data_course: CourseCreate):
     db.refresh(new_course)
     return new_course
 
-def update_course(db: Session, id_course, course: UpdateCourse):
+def update_course(db: Session, id_course, course: CourseUpdate):
     course_db = db.get(Course, id_course)
     if not course_db:
         return None
