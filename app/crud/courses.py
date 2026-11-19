@@ -4,7 +4,7 @@ from sqlalchemy import select
 
 from models.courses import Course
 
-from schemas.courses_schemas import CourseCreate, CourseUpdate as UpdateCourse
+from schemas.courses_schemas import CourseCreate, CourseUpdate
 
 
 def get_all_courses(db: Session):
