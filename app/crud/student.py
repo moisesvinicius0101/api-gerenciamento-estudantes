@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 
 from models.students import Student
+from models.courses import Course
 
 from schemas.student_schemas import StudentCreate, UpdateStudent
 
@@ -18,6 +19,9 @@ def filter_students(db: Session, nome: str | None, curso: str | None):
     if nome:
         query = query.where(Student.nome.ilike(f"%{nome}%"))
 
+    if curso:
+        query = query.join(Course).where(Course.title.ilike(f"%{curso}%"))
+
     return db.scalars(query).unique().all()
 
 def get_student_by_id(db: Session, id_student):
@@ -29,10 +33,17 @@ def create_student(db: Session, data_student: StudentCreate):
     if db.scalar(query):
         return None
 
+    # valida o curso, se foi informado
+    if data_student.course_id is not None:
+        course = db.get(Course, data_student.course_id)
+        if not course:
+            return "course_not_found"
+
     new_student = Student(
         nome=data_student.nome,
         idade=data_student.idade,
-        email=str(data_student.email)
+        email=str(data_student.email),
+        course_id=data_student.course_id,  
     )
     db.add(new_student)
     db.commit()
