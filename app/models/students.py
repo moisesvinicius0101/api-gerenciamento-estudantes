@@ -1,6 +1,6 @@
 
 
-from sqlalchemy import String
+from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
@@ -14,6 +14,10 @@ class Student(Base):
     idade: Mapped[int] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(
         String, unique=True, index=True, nullable=False
+    )
+
+    course_id: Mapped[int] = mapped_column(
+        ForeignKey("courses.id"), nullable=False
     )
 
     courses = relationship("Course", back_populates="students")
