@@ -33,17 +33,11 @@ def create_student(db: Session, data_student: StudentCreate):
     if db.scalar(query):
         return None
 
-    # valida o curso, se foi informado
-    if data_student.course_id is not None:
-        course = db.get(Course, data_student.course_id)
-        if not course:
-            return "course_not_found"
-
     new_student = Student(
         nome=data_student.nome,
         idade=data_student.idade,
         email=str(data_student.email),
-        course_id=data_student.course_id,  
+        course_id=data_student.course_id,
     )
     db.add(new_student)
     db.commit()

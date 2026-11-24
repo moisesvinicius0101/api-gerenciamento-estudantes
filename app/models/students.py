@@ -16,10 +16,10 @@ class Student(Base):
         String, unique=True, index=True, nullable=False
     )
 
-    course_id: Mapped[int] = mapped_column(
-        ForeignKey("courses.id"), nullable=False
+    course_id: Mapped[int | None] = mapped_column(
+        ForeignKey("courses.id"), nullable=True
     )
 
-    courses = relationship("Course", back_populates="students")
+    course = relationship("Course", back_populates="students")
 
     

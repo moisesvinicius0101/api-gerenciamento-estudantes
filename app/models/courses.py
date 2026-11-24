@@ -13,4 +13,4 @@ class Course(Base):
     title = Column(String(100), nullable=False)
     description = Column(Text, nullable=True)
 
-    student = relationship("Student", back_populates="course")
+    students = relationship("Student", back_populates="course")

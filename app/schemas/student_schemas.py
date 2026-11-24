@@ -7,8 +7,8 @@ class CourseInStudent(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
-    nome: str
-    carga_horaria: int
+    title: str
+    description: str | None = None
 
 
 class StudentCreate(BaseModel):
