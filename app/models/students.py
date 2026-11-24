@@ -1,7 +1,7 @@
 
 
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
 
@@ -15,5 +15,7 @@ class Student(Base):
     email: Mapped[str] = mapped_column(
         String, unique=True, index=True, nullable=False
     )
+
+    courses = relationship("Course", back_populates="students")
 
     
