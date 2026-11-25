@@ -9,8 +9,11 @@ from sqlalchemy.orm import Session
 from crud import users as crud_users
 from database import get_db
 from dependencies import CurrentUser
-from schemas.user_schemas import Token, UserCreate, UserResponse
+from schemas.user_schemas import Token, UserCreate, UserResponse, UserRoleUpdate
 from utill.security import create_access_token
+
+from models.users import User, UserRole
+from dependencies import AdminUser
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -43,3 +46,19 @@ def login(
 @router.get("/me", response_model=UserResponse)
 def me(current_user: CurrentUser):
     return current_user
+
+@router.patch("/users/{user_id}/role", response_model=UserResponse)
+def change_role(
+    user_id: int,
+    data: UserRoleUpdate,
+    admin: AdminUser,
+    db: Annotated[Session, Depends(get_db)],
+):
+    user = db.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    if user.id == admin.id and data.role != UserRole.ADMIN:
+        raise HTTPException(
+            status_code=400, detail="Você não pode remover seu próprio acesso de admin"
+        )
+    return crud_users.update_user_role(db, user, data.role)
