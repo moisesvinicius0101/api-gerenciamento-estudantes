@@ -5,6 +5,7 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
+from models.users import UserRole
 
 from database import get_db
 from models.users import User
@@ -32,6 +33,22 @@ def get_current_user(
         raise credentials_exception
 
     return user
+
+
+def require_roles(*allowed: UserRole):
+    def checker(current_user: CurrentUser) -> User:
+        if current_user.role not in allowed:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Você não tem permissão para esta ação",
+            )
+        return current_user
+
+    return checker
+
+
+require_admin = require_roles(UserRole.ADMIN)
+AdminUser = Annotated[User, Depends(require_admin)]
 
 
 CurrentUser = Annotated[User, Depends(get_current_user)]

@@ -1,7 +1,7 @@
 
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
-
+from models.users import UserRole
 
 class UserCreate(BaseModel):
     email: EmailStr
@@ -13,7 +13,10 @@ class UserResponse(BaseModel):
 
     id: int
     email: EmailStr
+    role: UserRole
 
+class UserRoleUpdate(BaseModel):
+    role: UserRole
 
 class Token(BaseModel):
     access_token: str

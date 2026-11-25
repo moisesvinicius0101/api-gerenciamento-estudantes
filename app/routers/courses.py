@@ -7,6 +7,8 @@ from typing import Annotated
 from crud import courses
 from schemas.courses_schemas import CourseCreate, CourseUpdate
 
+from dependencies import require_admin
+
 from database import get_db
 # schemas 
 
@@ -34,7 +36,7 @@ def get_course_by_id(id_course: int, db: db_dependency):
     
     return course
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, dependencies=[Depends(require_admin)])
 def create_course(db: db_dependency, data_course: CourseCreate):
 
     course = courses.create_course(db, data_course)
@@ -47,7 +49,7 @@ def create_course(db: db_dependency, data_course: CourseCreate):
     
     return course
 
-@router.put("/{id_course}", status_code=status.HTTP_200_OK)
+@router.put("/{id_course}", status_code=status.HTTP_200_OK, dependencies=[Depends(require_admin)])
 def update_course(id_course: int, db: db_dependency, data_course: CourseUpdate):
     course = courses.update_course(db, id_course, data_course)
 
@@ -59,7 +61,7 @@ def update_course(id_course: int, db: db_dependency, data_course: CourseUpdate):
 
     return course
 
-@router.delete("/{id_course}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id_course}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(require_admin)])
 def delete_course(id_course: int, db: db_dependency):
     course = courses.delete_course(db, id_course)
 

@@ -13,6 +13,8 @@ from typing import Annotated
 
 from crud import student as crud
 
+from dependencies import require_admin
+
 
 router = APIRouter(
     prefix="/students",
@@ -25,7 +27,7 @@ db_dependency = Annotated[Session, Depends(get_db)]
 # LISTAR TODOS OS ESTUDANTES
 
 
-@router.get("/", response_model=list[ResponseStudent])
+@router.get("/", response_model=list[ResponseStudent], dependencies=[Depends(require_admin)])
 def get_all(db: db_dependency):
     students = crud.get_all_students(db)
     if students:
@@ -41,7 +43,7 @@ def get_all(db: db_dependency):
 # FILTRAR ESTUDANTES
 # ==============================
 
-@router.get("/search", response_model=list[ResponseStudent])
+@router.get("/search", response_model=list[ResponseStudent], dependencies=[Depends(require_admin)])
 def search_students(
     db: db_dependency,
     nome: str | None = None,
@@ -56,7 +58,8 @@ def search_students(
 @router.get(
     "/{id_student}",
     status_code=status.HTTP_200_OK,
-    response_model=ResponseStudent
+    response_model=ResponseStudent,
+    dependencies=[Depends(require_admin)]
 )
 def get_by_id(db: db_dependency, id_student: int):
 
@@ -77,7 +80,8 @@ def get_by_id(db: db_dependency, id_student: int):
 @router.post(
     "/",
     status_code=status.HTTP_201_CREATED,
-    response_model=ResponseStudent
+    response_model=ResponseStudent,
+    dependencies=[Depends(require_admin)]
 )
 def create_student(db: db_dependency, data_student: StudentCreate):
     try:
@@ -106,7 +110,8 @@ def create_student(db: db_dependency, data_student: StudentCreate):
 @router.put(
     "/{id_student}",
     status_code=status.HTTP_200_OK,
-    response_model=ResponseStudent
+    response_model=ResponseStudent,
+    dependencies=[Depends(require_admin)]
 )
 def update_student(db: db_dependency, id_student: int, student: UpdateStudent):
     try:
@@ -131,7 +136,8 @@ def update_student(db: db_dependency, id_student: int, student: UpdateStudent):
 
 @router.delete(
     "/{id_student}",
-    status_code=status.HTTP_204_NO_CONTENT
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(require_admin)]
 )
 def delete_student(db: db_dependency, id_student: int):
 
