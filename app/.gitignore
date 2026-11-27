@@ -1,8 +1,7 @@
-venv/
+﻿venv/
 __pycache__/
 *.pyc
 .env
 !.env.example
-school.dbschool.db
+school.db
 .pytest_cache/
-__pycache__/
