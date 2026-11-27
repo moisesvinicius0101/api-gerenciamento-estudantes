@@ -3,4 +3,6 @@ __pycache__/
 *.pyc
 .env
 !.env.example
-school.db
+school.dbschool.db
+.pytest_cache/
+__pycache__/
